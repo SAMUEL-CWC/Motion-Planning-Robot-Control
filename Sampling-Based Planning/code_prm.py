@@ -7,7 +7,7 @@ import heapq
 
 # Constants
 domain_min, domain_max = -0.5, 0.5
-num_samples = 300  # Number of nodes to sample (you can tune this)
+num_samples = 30  # Number of nodes to sample (you can tune this)
 num_neighbors = 10  # Number of nearest neighbors to connect (you can tune this)
 start = (-0.5, -0.5)
 goal = (0.5, 0.5)
@@ -20,8 +20,8 @@ def load_obstacles(file):
         for _ in range(5):  # Skip first 5 rows
             next(reader, None)
         for row in reader:
-            x, y, r = map(float, row)
-            obstacles.append((x, y, r))
+            x, y, d = map(float, row)
+            obstacles.append((x, y, d / 2))
     return obstacles
 
 # Check if a point is in collision
@@ -114,7 +114,7 @@ def main():
     
     save_csv("nodes.csv", nodes, ["#ID", "x", "y"])
     save_csv("edges.csv", edges, ["#ID1", "ID2", "Cost"])
-    save_csv("path.csv", [[node] for node in path], ["#"])
+    save_csv("path.csv", [path[::-1]], ["#"])
 
 if __name__ == "__main__":
     main()

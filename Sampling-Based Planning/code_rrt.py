@@ -7,7 +7,7 @@ domain_min, domain_max = -0.5, 0.5
 goal_sample_rate = 0.1 # 10% probability of sampling the goal
 goal = (0.5, 0.5)
 start = (-0.5, -0.5)
-max_iterations = 10000 # You can tune this
+max_iterations = 1000 # You can tune this
 
 # Load obstacles
 def load_obstacles(file):
@@ -17,8 +17,8 @@ def load_obstacles(file):
         for _ in range(5):  # Skip the first 5 rows (depending on your file format)
             next(reader, None)
         for row in reader:
-            x, y, r = map(float, row)
-            obstacles.append((x, y, r))
+            x, y, d = map(float, row)
+            obstacles.append((x, y, d / 2))
     return obstacles
 
 # Check if a point is in collision
@@ -29,7 +29,7 @@ def is_in_collision(x, y, obstacles):
     return False
 
 # Check if a path is collision-free
-def is_collision_free(x1, y1, x2, y2, obstacles, num_samples=10):
+def is_collision_free(x1, y1, x2, y2, obstacles, num_samples=100):
     for i in range(num_samples + 1):
         alpha = i / num_samples
         x = x1 * (1 - alpha) + x2 * alpha
